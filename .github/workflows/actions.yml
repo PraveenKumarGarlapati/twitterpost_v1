@@ -1,8 +1,13 @@
 name: run main.py
 
 on:
-  schedule:
-    - cron: '30 9 * * *' # At 09:30 on Monday, Tuesday, Wednesday, Thursday, and Friday.
+    push:
+        branches:
+            - main
+        paths:
+            - '**/*.yml'
+#   schedule:
+#     - cron: '30 9 * * *' # At 09:30 on Monday, Tuesday, Wednesday, Thursday, and Friday.
 
 jobs:
   build:
