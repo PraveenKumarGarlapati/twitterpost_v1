@@ -26,6 +26,7 @@ print(titles_string)
 
 ###############
 ### Passes the above trending news as a prompt to LLM and gets a quirky tweet.
+## Double check once this is deployed
 
 genai.configure(api_key=GEMINI_API_KEY)
 
