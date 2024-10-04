@@ -4,11 +4,12 @@ import tweepy
 from gnews import GNews
 import google.generativeai as genai
 
-api = GH_API
-api_secret = GH_API_SECRET 
-access_token = GH_ACCESS_TOKEN
-access_token_secret = GH_ACCESS_TOKEN_SECRET
-GEMINI_API_KEY = GH_GEMINI_API
+api = os.environ['GH_API']
+api_secret = os.environ['GH_API_SECRET'] 
+access_token = os.environ['GH_ACCESS_TOKEN']
+access_token_secret = os.environ['GH_ACCESS_TOKEN_SECRET']
+GEMINI_API_KEY = os.environ['GH_GEMINI_API']
+
 
 ## Gets the latest news from India, pickes the top 2
 google_news = GNews()
