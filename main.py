@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import tweepy
+import random
 from gnews import GNews
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
@@ -14,26 +15,28 @@ GEMINI_API_KEY = os.environ['GH_GEMINI_API']
 news_api = os.environ['GH_NEWS_API']
 
 
-## Gets the latest news from India, pickes the top 2
-google_news = GNews()
-google_news.period = '7d'  # News from last 7 days
-google_news.max_results = 5  # number of responses across a keyword
-google_news.country = 'India'  # News from a specific country 
-google_news.language = 'english' 
-
-news_list = google_news.get_news_by_location('India')
-print(news_list)
-
-titles = [item['description'] for item in news_list]
-titles_string = '\n'.join(titles[:2])
-print(titles_string)
-
 ###############
-### Passes the above trending news as a prompt to LLM and gets a quirky tweet.
-## Double check once this is deployed
+
+from newsapi import NewsApiClient
+newsapi = NewsApiClient(api_key=news_api)
+
+#Pick a topic at random to get the news
+master_list = ['AI','business','finance','sports','politics']
+selected_topic = random.choice(master_list)
+
+# Get the dump of all news items
+all_articles = newsapi.get_everything(q=selected_topic,
+                                      language='en',
+                                      sort_by='relevancy'
+                                      )
+
+
+### Setup LLM API Key
+
 genai.configure(api_key=GEMINI_API_KEY)
 
-model = genai.GenerativeModel(model_name="gemini-pro")
+model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+# model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
 safety_settings={
         HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
@@ -42,16 +45,38 @@ safety_settings={
         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,      
     }
 
+## Defining an elaborate prompt to generate the tweet
 
-prompt = f"Give me a quirky tweet along with hashtags. Length has to be less than 160 characters. Here are your cues - {titles_string}.."
-response = model.generate_content(
-    prompt, 
+prompt = f"""
+
+{all_articles}
+
+You are a witty social media expert who creates engaging, quirky tweets that get high engagement. Your task is to create a tweet based on the given text
+
+Guidelines for tweet creation:
+
+Don't go with the first one. See all the topics covered and pick one that has a scope for witty humor
+If you can find some content for India, give it more weightage
+Keep it under 280 characters. 
+Use informal, contemporary internet language
+Include either humor, irony, or a controversial-yet-acceptable take
+Occasionally use emojis.
+Reference current memes or trends when relevant
+Make it shareable and engaging
+Include hastags for twitter
+
+Tone variations (use a mix of these two):
+Sarcastic observer
+Chaotic good energy
+
+Give out only 1 tweet
+"""
+
+response = model.generate_content(prompt,
     safety_settings = safety_settings)
 print(response.text)
 
-###############
-### Picks that text and posts to my profile as a new tweet
-
+# Creation of Twitter client to post to my profile 
 client = tweepy.Client(
     consumer_key=api,
     consumer_secret=api_secret,
@@ -59,7 +84,5 @@ client = tweepy.Client(
     access_token_secret= access_token_secret
 )
 
+
 client.create_tweet(text = response.text)
-
-
-
