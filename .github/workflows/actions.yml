@@ -1,13 +1,9 @@
 name: run main.py
 
 on:
-    # push:
-    #     branches:
-    #         - main
-    #     paths:
-    #         - '**/*.yml'
   schedule:
-    - cron: '30 4,9,14 * * *' # 3 times a day
+    - cron: '30 4,6,7,9,11,14,16,18 * * *' # multiple times in a day
+  workflow_dispatch: #For manual triggers
 
 
 jobs:
@@ -35,6 +31,7 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           GH_ACCESS_TOKEN_SECRET: ${{ secrets.GH_ACCESS_TOKEN_SECRET }}
           GH_GEMINI_API: ${{ secrets.GH_GEMINI_API }}
+          GH_NEWS_API: ${{ secrets.GH_NEWS_API }}
         run: python main.py
           
       - name: commit files
