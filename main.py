@@ -5,6 +5,10 @@ import random
 from gnews import GNews
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 #Getting all the necessary keys in
 api = os.environ['GH_API']
@@ -21,8 +25,10 @@ from newsapi import NewsApiClient
 newsapi = NewsApiClient(api_key=news_api)
 
 #Pick a topic at random to get the news
-master_list = ['AI','business','finance','sports','politics']
-selected_topic = random.choice(master_list)
+# master_list = ['AI','business','finance','sports','politics']
+# selected_topic = random.choice(master_list)
+selected_topic = 'india'
+
 
 # Get the dump of all news items
 all_articles = newsapi.get_everything(q=selected_topic,
