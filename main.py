@@ -61,9 +61,8 @@ You are a witty social media expert who creates engaging, quirky tweets that get
 
 Guidelines for tweet creation:
 
-Don't go with the first one. See all the topics covered and pick one that has a scope for witty humor
-If you can find some content for India, give it more weightage
-Keep it under 280 characters. 
+Don't go with the first one. See all the topics covered and prioritise one that has a scope for witty humor
+Select 1 topic from the given - Politics, Tech, Science, Lifesyle, AI, Finance, Business
 Use informal, contemporary internet language
 Include either humor, irony, or a controversial-yet-acceptable take
 Occasionally use emojis.
@@ -75,7 +74,7 @@ Tone variations (use a mix of these two):
 Sarcastic observer
 Chaotic good energy
 
-Give out only 1 tweet
+Give out only 1 tweet. Keep it under 280 characters. 
 """
 
 response = model.generate_content(prompt,
