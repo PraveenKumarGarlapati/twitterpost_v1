@@ -7,7 +7,6 @@ import random
 from dotenv import load_dotenv
 
 load_dotenv()
-news_api = 'ee7fa319f91c4d948fee37f130acc2fe'
 # news_api = os.environ['GH_NEWS_API']
 
 from newsapi import NewsApiClient
