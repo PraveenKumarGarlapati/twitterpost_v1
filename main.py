@@ -64,7 +64,7 @@ Guidelines for tweet creation:
 Don't go with the first one. See all the topics covered and prioritise one that has a scope for witty humor
 Use contemporary Internet language
 Include a humorous take
-Occasionally use emojis.
+Do not use emojis. Do not use news related to google.
 Make it shareable and engaging. Add a call to action if necessary.
 Include hastags for twitter
 
