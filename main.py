@@ -7,6 +7,11 @@ import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from dotenv import load_dotenv
 import os
+import requests
+import os
+from supabase import create_client, Client
+import json
+
 
 load_dotenv()
 
@@ -18,66 +23,62 @@ access_token_secret = os.environ['GH_ACCESS_TOKEN_SECRET']
 GEMINI_API_KEY = os.environ['GH_GEMINI_API']
 news_api = os.environ['GH_NEWS_API']
 
+perp_api = os.environ['GH_PERP_API']
+sb_project_url = os.environ['GH_SB_PROJECT_URL']
+sb_api = os.environ['GH_SB_API']
 
-###############
+supabase: Client = create_client(sb_project_url, sb_api)
 
-from newsapi import NewsApiClient
-newsapi = NewsApiClient(api_key=news_api)
-
-#Pick a topic at random to get the news
-master_list = ['science','business','technology','sports','entertainment']
-selected_topic = random.choice(master_list)
-
-# Get the dump of all news items
-all_articles = newsapi.get_top_headlines(sources = 'google-news-in', language = 'en')
-
-# all_articles = newsapi.get_everything(q=selected_topic,
-#                                       language='en',
-#                                       sort_by='relevancy'
-#                                       )
+#Fetch data 
+sb_response = supabase.table("post_logs").select("*").execute()
 
 
-### Setup LLM API Key
+last_tweets = []
 
-genai.configure(api_key=GEMINI_API_KEY)
+url = "https://api.perplexity.ai/chat/completions"
 
-model = genai.GenerativeModel(model_name="gemini-1.5-pro")
-# model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+payload = {
+    "model": "sonar",
+    "messages": [
+        {
+            "role": "system",
+            "content": "I am a social media influencer that posts updates on daily basis. I crave attention and controverty. Sarcasm is in my blood"
+        },
+        {
+            "role": "user",
+            "content": f"""
+            Pick a topic that is trending in the last hour in India as of today.
+            Ensure you pick a topic that is not from the last 10 tweets that I posted. 
+            Last 10 tweets : {last_tweets}
+            Make a funny, witty tweet on the same news. Feel free to make it controversial and sarcastic. 
+            Output only the final tweet.
+            """
+        }
+    ],
+    "max_tokens": 123,
+    "temperature": 0.2,
+    "top_p": 0.9,
+    "search_domain_filter": None,
+    "return_images": False,
+    "return_related_questions": False,
+    "search_recency_filter": "hour",
+    "top_k": 0,
+    "stream": False,
+    "presence_penalty": 0,
+    "frequency_penalty": 1,
+    "response_format": None
+}
+headers = {
+    "Authorization": f"Bearer {perp_api}",
+    "Content-Type": "application/json"
+}
 
-safety_settings={
-        HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-        HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-        HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,      
-    }
+response = requests.request("POST", url, json=payload, headers=headers)
 
-## Defining an elaborate prompt to generate the tweet
+data = response.json()
+message_content = data["choices"][0]["message"]["content"]
+print(message_content)
 
-prompt = f"""
-
-{all_articles}
-
-You are a witty social media expert who creates engaging, quirky tweets that get high engagement. Your task is to create a tweet based on the given text
-
-Guidelines for tweet creation:
-
-Don't go with the first one. See all the topics covered and prioritise one that has a scope for witty humor
-Use contemporary Internet language
-Include a humorous take
-Do not use emojis. Do not use news related to google.
-Make it shareable and engaging. Add a call to action if necessary.
-Include hastags for twitter
-
-Tone variations (use a mix of these two):
-Keen observer
-Chaotic good energy
-
-Give out only 1 tweet. Keep it under 280 characters. 
-"""
-
-response = model.generate_content(prompt,
-    safety_settings = safety_settings)
-print(response.text)
 
 # Creation of Twitter client to post to my profile 
 client = tweepy.Client(
@@ -88,4 +89,4 @@ client = tweepy.Client(
 )
 
 
-client.create_tweet(text = response.text)
+client.create_tweet(text = message_content)

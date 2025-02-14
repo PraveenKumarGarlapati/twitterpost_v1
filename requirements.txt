@@ -14,3 +14,4 @@ gnews==0.3.7
 urllib3==2.2.3
 newsapi-python==0.2.7
 python-dotenv
+supabase
