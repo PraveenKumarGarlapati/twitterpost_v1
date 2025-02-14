@@ -32,6 +32,10 @@ jobs:
           GH_ACCESS_TOKEN_SECRET: ${{ secrets.GH_ACCESS_TOKEN_SECRET }}
           GH_GEMINI_API: ${{ secrets.GH_GEMINI_API }}
           GH_NEWS_API: ${{ secrets.GH_NEWS_API }}
+          GH_PERP_API: ${{ secrets.GH_PERP_API }}
+          GH_SB_PROJECT_URL: ${{ secrets.GH_SB_PROJECT_URL }}
+          GH_SB_API: ${{ secrets.GH_SB_API }}
+          
         run: python main.py
           
       - name: commit files
