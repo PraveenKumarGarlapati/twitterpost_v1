@@ -49,11 +49,23 @@ payload = {
         {
             "role": "user",
             "content": f"""
+            Example format for the tweets-
+
+            Breaking : Trump and Modi announce a trade deal
+            Funny that someone has to go all the way across oceans to creack 1 deal #hellojoke
+
+            Breaking : Kohli retires from T20 cricket
+            Oh No. All those kohli bashers are unemployed now #jobloss
+
+            Steps -
+
             Content 1: Pick the top news from leading news websites in india - business, sports, entertainment, tech
             Content 2: Also pick the top trending topics in India from twitter as of now.
             Content 3: See what people are talking about this on reddit forums
-            Do not pick any topic from this list : {last_tweets}
-            Using both content 1, content 2 and content 3, please generate a funny and witty tweet. Give more weightate to reddit forums. Feel free to make it controversial and sarcastic. Use only one hashtag in the final tweet
+
+            Do not pick any topic from these last tweets : {last_tweets}
+
+            Using both content 1, content 2 and content 3, please generate a funny and witty tweet. Give more weightate to reddit forums. Feel free to make it controversial and sarcastic. Structure the final tweet as per the given example format. Use only one hashtag in the final tweet
             Output only the final tweet.
             """
         }
