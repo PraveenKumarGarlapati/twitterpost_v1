@@ -77,7 +77,8 @@ response = requests.request("POST", url, json=payload, headers=headers)
 
 data = response.json()
 message_content = data["choices"][0]["message"]["content"]
-print(message_content)
+final_message = message_content.strip('"')
+print(final_message)
 
 
 # Creation of Twitter client to post to my profile 
@@ -89,4 +90,4 @@ client = tweepy.Client(
 )
 
 
-client.create_tweet(text = message_content)
+client.create_tweet(text = final_message)
