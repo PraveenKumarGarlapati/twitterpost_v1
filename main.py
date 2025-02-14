@@ -11,6 +11,8 @@ import requests
 import os
 from supabase import create_client, Client
 import json
+from datetime import datetime, timezone
+
 
 
 load_dotenv()
@@ -30,10 +32,10 @@ sb_api = os.environ['GH_SB_API']
 supabase: Client = create_client(sb_project_url, sb_api)
 
 #Fetch data 
-sb_response = supabase.table("post_logs").select("*").execute()
-
-
-last_tweets = []
+# get last 5 tweets
+sb_data = supabase.table("post_logs").select("*").execute()
+last_tweets = " ".join(tweet['tweet_text'].strip('"') for tweet in sb_data.data[-5:])
+print(last_tweets)
 
 url = "https://api.perplexity.ai/chat/completions"
 
@@ -50,7 +52,7 @@ payload = {
             Pick a topic that is trending in the last hour in India as of today.
             Ensure you pick a topic that is not from the last 10 tweets that I posted. 
             Last 10 tweets : {last_tweets}
-            Make a funny, witty tweet on the same news. Feel free to make it controversial and sarcastic. 
+            Make a funny, witty tweet on the same news. Feel free to make it controversial and sarcastic. Use just one hashtag.
             Output only the final tweet.
             """
         }
@@ -89,5 +91,14 @@ client = tweepy.Client(
     access_token_secret= access_token_secret
 )
 
-
 client.create_tweet(text = final_message)
+
+# Get current date and time as a single string
+date_time1 = datetime.now().strftime("%y%m%d%H%M%S")
+date_time2 = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f+00")
+
+#Storing the tweet to a persistent database
+supabase.table("post_logs")\
+.insert({"id": date_time1, "created_at": date_time2, "tweet_text": final_message})\
+.execute()
+
