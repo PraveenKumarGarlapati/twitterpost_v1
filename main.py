@@ -49,10 +49,10 @@ payload = {
         {
             "role": "user",
             "content": f"""
-            Pick a topic that is trending in the last hour in India as of today.
-            Ensure you pick a topic that is not from the last 10 tweets that I posted. 
-            Last 10 tweets : {last_tweets}
-            Make a funny, witty tweet on the same news. Feel free to make it controversial and sarcastic. Use just one hashtag.
+            Content 1: Pick the top trending english hashtags in India as of now
+            Content 2: Also pick the top trending topics in India as of now.
+            Do not pick any topic from this list : {last_tweets}
+            Using both content 1 and content 2, please generate a funny and witty tweet. Feel free to make it controversial and sarcastic. Use only one hashtag in the final tweet
             Output only the final tweet.
             """
         }
