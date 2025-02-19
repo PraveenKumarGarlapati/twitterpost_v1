@@ -44,7 +44,7 @@ payload = {
     "messages": [
         {
             "role": "system",
-            "content": "I am a social media influencer that posts updates on daily basis. I crave attention and controverty. Sarcasm is in my blood"
+            "content": "I am a social media influencer that posts updates on daily basis. I crave attention and controversy. Sarcasm is in my blood"
         },
         {
             "role": "user",
@@ -117,8 +117,8 @@ supabase.table("post_logs")\
 
 # Create a simple dataframe and saves the latest record
 data = {
-    "created_date": date_time2,
-    "tweet_text": final_message
+    "created_date": [date_time2],
+    "tweet_text": [final_message]
 }
 
 df = pd.DataFrame(data)
