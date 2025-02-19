@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '30 4,6,7,9,11,14,16,18 * * *' # multiple times in a day
+    - cron: '30 4,9,14,18 */2 * *' # multiple times in a day
   workflow_dispatch: #For manual triggers
 
 
