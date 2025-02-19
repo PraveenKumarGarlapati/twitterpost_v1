@@ -52,7 +52,7 @@ payload = {
             Example format for the tweets-
 
             Breaking : Trump and Modi announce a trade deal
-            Funny that someone has to go all the way across oceans to creack 1 deal #hellojoke
+            Funny that someone has to go all the way across oceans to crack 1 deal #hellojoke
 
             Breaking : Kohli retires from T20 cricket
             Oh No. All those kohli bashers are unemployed now #jobloss
@@ -71,7 +71,7 @@ payload = {
         }
     ],
     "max_tokens": 123,
-    "temperature": 0.2,
+    "temperature": 0.5,
     "top_p": 0.9,
     "search_domain_filter": None,
     "return_images": False,
@@ -115,3 +115,13 @@ supabase.table("post_logs")\
 .insert({"id": date_time1, "created_at": date_time2, "tweet_text": final_message})\
 .execute()
 
+# Create a simple dataframe and saves the latest record
+data = {
+    "created_date": date_time2,
+    "tweet_text": final_message
+}
+
+df = pd.DataFrame(data)
+csv_filename = "latest_tweet_record.csv"  # Change this to your desired local path, e.g., "C:/Users/YourName/Documents/tweets.csv"
+df.to_csv(csv_filename, index=False)
+print(f"CSV file saved to {csv_filename}")
