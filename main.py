@@ -66,7 +66,7 @@ payload = {
             Do not pick any topic from these last tweets : {last_tweets}
 
             Using both content 1, content 2 and content 3, please generate a funny and witty tweet. Give more weightate to reddit forums. Feel free to make it controversial and sarcastic. Structure the final tweet as per the given example format. Use only one hashtag in the final tweet
-            Output only the final tweet.
+            Take example format as reference, do not use the format as is. Output only the final tweet.
             """
         }
     ],
