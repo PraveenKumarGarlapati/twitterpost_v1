@@ -96,6 +96,7 @@ headers = {
 response = requests.request("POST", url, json=payload, headers=headers)
 
 data = response.json()
+print(data)
 message_content = data["choices"][0]["message"]["content"]
 final_message = message_content.strip('"')
 print(final_message)
