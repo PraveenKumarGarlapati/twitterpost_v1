@@ -81,7 +81,7 @@ payload = {
     "search_domain_filter": None,
     "return_images": False,
     "return_related_questions": False,
-    "search_recency_filter": "4h",
+    "search_recency_filter": "day",
     "top_k": 0,
     "stream": False,
     "presence_penalty": 0,
