@@ -12,6 +12,7 @@ import os
 from supabase import create_client, Client
 import json
 from datetime import datetime, timezone
+import time
 
 
 
@@ -51,10 +52,10 @@ payload = {
             "content": f"""
             Example format for the tweets-
 
-            Breaking : Trump and Modi announce a trade deal
-            Funny that someone has to go all the way across oceans to crack 1 deal 
+            Trump and Modi announce a trade deal
+            Funny that someone has to go all the way across oceans to crack one deal 
 
-            Breaking : Kohli retires from T20 cricket
+            Kohli retires from T20 cricket
             Oh No. All those kohli bashers are unemployed now #jobloss
 
             Take this format only for reference. Use your creativity to generate a tweet. 
@@ -67,19 +68,20 @@ payload = {
 
             Do not pick any topic related to these last tweets : {last_tweets}
 
-            Using both content 1, content 2 and content 3, please generate a funny and witty tweet. Give more weightate to reddit forums. Feel free to make it controversial and sarcastic. Do NOT use any hashtag in the final tweet
+            Using both content 1, content 2 and content 3,  generate a funny and witty tweet. Vary the tweet length between 90-260 characters.
+            Feel free to make it controversial and sarcastic. Do NOT use any hashtag in the final tweet
             Do not use any bold or italic characters. Output just the final tweet that can posted directly. 
 
             """
         }
     ],
-    "max_tokens": 123,
-    "temperature": 0.5,
+    "max_tokens": 150,
+    "temperature": 0.9,
     "top_p": 0.9,
     "search_domain_filter": None,
     "return_images": False,
     "return_related_questions": False,
-    "search_recency_filter": "hour",
+    "search_recency_filter": "4h",
     "top_k": 0,
     "stream": False,
     "presence_penalty": 0,
@@ -107,7 +109,49 @@ client = tweepy.Client(
     access_token_secret= access_token_secret
 )
 
-client.create_tweet(text = final_message)
+# client.create_tweet(text = final_message)
+
+##
+def post_tweet_with_retry(message, max_retries=3, initial_delay=5):
+    """
+    Attempt to post a tweet with retries on 403 Forbidden error.
+    
+    Args:
+        message (str): The tweet text to post.
+        max_retries (int): Maximum number of retry attempts.
+        initial_delay (int): Initial delay in seconds before retrying.
+    """
+    attempt = 0
+    delay = initial_delay
+
+    while attempt < max_retries:
+        try:
+            # Attempt to post the tweet
+            client.create_tweet(text=message)
+            print(f"Tweet posted successfully: '{message}'")
+            return  # Exit function if successful
+
+        except tweepy.errors.Forbidden as e:
+            attempt += 1
+            print(f"Attempt {attempt}/{max_retries} failed with 403 Forbidden: {e}")
+            
+            if attempt == max_retries:
+                print("Max retries reached. Tweet could not be posted.")
+                break
+            
+            # Exponential backoff: delay doubles each retry (5s, 10s, 20s, etc.)
+            print(f"Retrying in {delay} seconds...")
+            time.sleep(delay)
+            delay *= 2
+
+        except Exception as e:
+            # Handle other unexpected errors
+            print(f"Unexpected error: {e}")
+            break
+
+post_tweet_with_retry(final_message)
+##
+
 
 # Get current date and time as a single string
 date_time1 = datetime.now().strftime("%y%m%d%H%M%S")
