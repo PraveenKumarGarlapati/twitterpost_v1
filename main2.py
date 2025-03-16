@@ -53,16 +53,17 @@ payload = {
 
             Do not pick any topic related to these last tweets : {last_tweets}
 
-            Pick the latest happenings in the world of AI, datascience, generative AI and data science. 
-            Generate a knowledgeable tweet. Vary the tweet length between 100-260 characters.
-            Do NOT use any hashtag in the final tweet
-            Do not use any bold or italic characters. Output just the final tweet that can posted directly. 
+            Pick the latest who said what in the world of AI in the last one day.
+            Generate a tweet in pointers type, covering the key aspects and what could be the ramifications of this.
+            Be critical if you need to be.
+            Do NOT use any hashtag in the final tweet.
+            Do not use any bold or italic characters. Output just the final tweet that can posted directly.
 
             """
         }
     ],
     "max_tokens": 150,
-    "temperature": 0.9,
+    "temperature": 0.5,
     "top_p": 0.9,
     "search_domain_filter": None,
     "return_images": False,
