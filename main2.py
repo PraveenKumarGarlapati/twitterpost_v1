@@ -54,8 +54,8 @@ payload = {
             Do not pick any topic related to these last tweets : {last_tweets}
 
             Pick the latest who said what in the world of AI in the last one day.
-            Generate a tweet in pointers type, covering the key aspects and what could be the ramifications of this.
-            Be critical if you need to be.
+            Think like a data scientist geek. Be critical if you need to be. 
+            Generate a tweet(under 270 characters) in pointers type, covering the key aspects and what could be the ramifications of this.
             Do NOT use any hashtag in the final tweet.
             Do not use any bold or italic characters. Output just the final tweet that can posted directly.
 
