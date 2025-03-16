@@ -100,7 +100,7 @@ client = tweepy.Client(
 # client.create_tweet(text = final_message)
 
 ##
-def post_tweet_with_retry(message, max_retries=3, initial_delay=5):
+def post_tweet_with_retry(message, max_retries=2, initial_delay=10):
     """
     Attempt to post a tweet with retries on 403 Forbidden error.
     
